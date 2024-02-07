@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:googleapis/dialogflow/v3.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +23,30 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     initSpeech();
+  }
+
+  void getAuthClient() async {
+    //get json file from assets folder
+    String jsonString =
+        await rootBundle.loadString('grand-cosmos-413120-de3d5444e3c5.json');
+    Map<String, dynamic> jsonMap = json.decode(jsonString);
+    final credentials = ServiceAccountCredentials.fromJson(jsonMap);
+
+    final client = await clientViaServiceAccount(
+        credentials, ['https://www.googleapis.com/auth/cloud-platform']);
+    DialogflowApi dialogflow = DialogflowApi(client,
+        rootUrl: 'https://us-central1-dialogflow.googleapis.com/');
+    GoogleCloudDialogflowCxV3DetectIntentResponse response =
+        await dialogflow.projects.locations.agents.sessions.detectIntent(
+            GoogleCloudDialogflowCxV3DetectIntentRequest.fromJson({
+              "queryInput": {
+                "text": {"text": "Ver Planes"},
+                "languageCode": "en"
+              },
+              "queryParams": {"timeZone": "America/Los_Angeles"}
+            }),
+            'projects/grand-cosmos-413120/locations/us-central1/agents/6d6c016a-73a1-4f18-9f4f-d9cdfcb47466/sessions/1234567890');
+    print(response.queryResult!.responseMessages?[0].text?.text?[0]);
   }
 
   void initSpeech() async {
@@ -51,7 +79,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.amberAccent,
         title: const Text(
-          'Reconocimiento de voz',
+          'Carreras.com Chatbot',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -100,7 +128,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _speechToText.isListening ? _stopListening : _startListening,
+        onPressed: getAuthClient,
         tooltip: 'Listen',
         backgroundColor: Colors.amberAccent,
         child: Icon(
