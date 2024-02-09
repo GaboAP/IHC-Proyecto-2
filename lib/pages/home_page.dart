@@ -1,10 +1,10 @@
+import 'package:IHC_2ndProject/bloc/dialogflow/dialogflow_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:googleapis/dialogflow/v3.dart';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter/services.dart';
 
@@ -19,31 +19,43 @@ class _HomePageState extends State<HomePage> {
   final SpeechToText _speechToText = SpeechToText();
   final FlutterTts _flutterTts = FlutterTts();
 
+  bool _speechEnabled = false;
+  String _wordsSpoken = "";
+  double _confidenceLevel = 0;
+
   List<Map> _voices = [];
   Map? _currentVoice;
 
-  int? _currentWordStart, _currentWordEnd;
+  late DialogflowBloc dialogflowApi;
 
-  bool _speechEnabled = false;
-
-  String _wordsSpoken = "";
-  double _confidenceLevel = 0;
+  // int? _currentWordStart, _currentWordEnd;
 
   @override
   void initState() {
     super.initState();
-
+    dialogflowApi = BlocProvider.of<DialogflowBloc>(context);
     initSpeech();
     initTTS();
+    dialogflowApi.start();
+  }
+
+  void initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    _speechToText.statusListener = (status) async {
+      if (status == SpeechToText.doneStatus) {
+        String response = await dialogflowApi.sendMessage(_wordsSpoken);
+
+        // _flutterTts.speak(response);
+      }
+    };
+    setState(() {});
   }
 
   void initTTS() {
     _flutterTts.setProgressHandler((text, start, end, word) {
-      setState(() {
-        _currentWordStart = start;
-        _currentWordEnd = end;
-      });
+      // print("Progress: $start, $end, $word \n");
     });
+    _flutterTts.setSpeechRate(0.5).then((value) => null);
     _flutterTts.getVoices.then((data) {
       try {
         List<Map> voices = List<Map>.from(data);
@@ -54,42 +66,14 @@ class _HomePageState extends State<HomePage> {
           setVoice(_currentVoice!);
         });
       } catch (e) {
-        print(e);
+        // print(e);
       }
     });
+    // print(await _flutterTts.getLanguages);
   }
 
   void setVoice(Map voice) {
     _flutterTts.setVoice({"name": voice["name"], "locale": voice["locale"]});
-  }
-
-  void getAuthClient() async {
-    //get json file from assets folder
-    String jsonString =
-        await rootBundle.loadString('grand-cosmos-413120-de3d5444e3c5.json');
-    Map<String, dynamic> jsonMap = json.decode(jsonString);
-    final credentials = ServiceAccountCredentials.fromJson(jsonMap);
-
-    final client = await clientViaServiceAccount(
-        credentials, ['https://www.googleapis.com/auth/cloud-platform']);
-    DialogflowApi dialogflow = DialogflowApi(client,
-        rootUrl: 'https://us-central1-dialogflow.googleapis.com/');
-    GoogleCloudDialogflowCxV3DetectIntentResponse response =
-        await dialogflow.projects.locations.agents.sessions.detectIntent(
-            GoogleCloudDialogflowCxV3DetectIntentRequest.fromJson({
-              "queryInput": {
-                "text": {"text": "Ver Planes"},
-                "languageCode": "en"
-              },
-              "queryParams": {"timeZone": "America/Los_Angeles"}
-            }),
-            'projects/grand-cosmos-413120/locations/us-central1/agents/6d6c016a-73a1-4f18-9f4f-d9cdfcb47466/sessions/1234567890');
-    print(response.queryResult!.responseMessages?[0].text?.text?[0]);
-  }
-
-  void initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
   }
 
   void _startListening() async {
@@ -115,9 +99,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Colors.blue,
         title: const Text(
-          'Carreras.com Chatbot',
+          'IHC DEMO VOICE',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -130,10 +114,10 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 _speechToText.isListening
-                    ? "Escuchando..."
+                    ? "listening..."
                     : _speechEnabled
-                        ? "Toca el botón de micrófono para empezar a escuchar..."
-                        : "Micrófono no disponible",
+                        ? "Pulsa el microfono para iniciar a grabar..."
+                        : "Speech not available",
                 style: const TextStyle(fontSize: 20.0),
               ),
             ),
@@ -155,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                   bottom: 100,
                 ),
                 child: Text(
-                  "Confiabilidad: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
+                  "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
                   style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w200,
@@ -165,15 +149,22 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: getAuthClient,
-        tooltip: 'Listen',
-        backgroundColor: Colors.amberAccent,
-        child: Icon(
-          _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-          color: Colors.white,
-        ),
-      ),
+          onPressed: () {
+            _speechToText.isListening ? _stopListening() : _startListening();
+          },
+          tooltip: 'Listen',
+          backgroundColor: Colors.blue,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          child: Icon(
+            _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+            color: Colors.white,
+          )),
     );
   }
 }
