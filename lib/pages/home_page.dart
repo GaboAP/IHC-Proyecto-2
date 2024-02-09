@@ -3,6 +3,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:googleapis/dialogflow/v3.dart';
 import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,15 +17,50 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final SpeechToText _speechToText = SpeechToText();
+  final FlutterTts _flutterTts = FlutterTts();
+
+  List<Map> _voices = [];
+  Map? _currentVoice;
+
+  int? _currentWordStart, _currentWordEnd;
 
   bool _speechEnabled = false;
+
   String _wordsSpoken = "";
   double _confidenceLevel = 0;
 
   @override
   void initState() {
     super.initState();
+
     initSpeech();
+    initTTS();
+  }
+
+  void initTTS() {
+    _flutterTts.setProgressHandler((text, start, end, word) {
+      setState(() {
+        _currentWordStart = start;
+        _currentWordEnd = end;
+      });
+    });
+    _flutterTts.getVoices.then((data) {
+      try {
+        List<Map> voices = List<Map>.from(data);
+        setState(() {
+          _voices =
+              voices.where((voice) => voice["name"].contains("es")).toList();
+          _currentVoice = _voices.first;
+          setVoice(_currentVoice!);
+        });
+      } catch (e) {
+        print(e);
+      }
+    });
+  }
+
+  void setVoice(Map voice) {
+    _flutterTts.setVoice({"name": voice["name"], "locale": voice["locale"]});
   }
 
   void getAuthClient() async {

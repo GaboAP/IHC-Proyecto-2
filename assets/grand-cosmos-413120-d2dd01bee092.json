@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "grand-cosmos-413120",
+  "private_key_id": "d2dd01bee092e60ddaaad5841a6f1375cefa0fda",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCoG0/BPJH+2LQN\nM8z9sVvrAHY/Lr7/XM9FlB0ySArxg/KPVXw0/ijDA6Xm7kLtL+gjEYls/iDRSD4R\nB1TOYFX/l3PekncGYM0+6xqdf2L61I3gQcCYJb6F3wMm5jHQlzICqQApYjuZEjCf\nBHdqpXbguOV0wYbvOt/m+TfJy8z1gGuvxq0/z0zRnyHOR8LqFdbvtkIztHnIXVO5\n4rIIaAXSLNLmAJsBYUVBL03GL500BdhObGRlJzDeUQqjcg3kKb+WIoiatkYTFPdi\nhD1QgSFBtfeCRCw76z3d+U703c86IG0Po3NRTn9vF6tjda0X5oehyANuwfSZkqnU\n9DoLTw9TAgMBAAECggEACVijYYSi6qlVBrA3mG87mLWI3XsVhrsRPGFqEiPr6oDs\ng8g770emL9l3EtTHsco1EiYPyZiDben3UW5ilQAe0pFdZtAmf/CdLf9XlnlroQh0\n7t/uUPHgRYR1ohGwTqmT+o6M12rXvMCZ0BgpJNZtj+btEvBji89ufWKjwGYX+hos\n0rEdHrs/sF1Zav5tQyNUBNtv/ppGWSrj4RAjjAfhN1PYbHOlaHAwl42RVO9+jF0/\n306CRvTXRJeHY8gkWTYl9SgGSC17kwba5KD23/s5zo1ahCLgLCjIVBfcvR4M1tF/\nL0tlr8VFeE0THe10Wwki2OVOhdePfuCAwSUvdl34CQKBgQDpc76UqPTFLH2LFaI5\nCTMNAnfKi8Pm8uS3Gpu7RwWs3u6OznQi9utRwv+sVcvgavYLLsMQs7Tg2pJoFtQL\n2XZVWEMzCr/65zvVdzuaWc34cCs/BLCubRJuywqr6rhsL9SKsrts/5V5SfpJlsnk\nKR/52I9xR9avSp2MIKdQNEnnbwKBgQC4V9vMoHoC7gKqrJKw8xaa+xOMtRsnZn3+\nuvU7vNuM1WD9ye5fcb8ErXWF3Le1rP7sKZaG2xQOYsW7fidC46wYoFRszch0lpaO\nXWTqX7rVIeIkL7mkzJoOjMVoHgVOFsFnWq/7msuCNJSO/82DP4/skCLy11tPWR8o\nIJjYEovEXQKBgQC1dnDHoWVR9rlHaXOFni7+h9KRsH6AgIFkCtzOf/BbZZZNjxEb\nNI/KKCcQ0Ef/k2TZYGnkC6wns/5lxojhBRJEWK0zecGsyBzsWxgLbI779ETJYV3s\n13+ie1U6OONNxQgTH8csfKa1dtmEZh9cqNLgJIOrbEnmS7uW9rLXVy2zJQKBgCPA\n7qGekmuVDDFcLUtiqoS+o8kLq0uWBmPskPnYJGEJVbmDe9dJMXpPxlaDO6Jh/kOB\nwW9AeIBdyeoWirjffZZ9KkK8Gt/6ARN1q8gFbzA9VSYdl40OHecqiHMsN20w3qwU\nG8PZ/xSu7A1cMdj98AU643xkJpKaP3/B6sMlvbQFAoGBAK+DSPUjGqs4EanxhiLs\nsl+j5/5gQh3jyNy8f1hxU3jmTl5rSl1JjV1v2rmQ3XDLS7iY6SUaFdfRbVKWBdXT\nABCAYJx7uaoEn/PdKGEXruIRMxznSSOsbZBZIbkCP0IFUlvjN7HZAl2nwJepEcGu\nVFJx3hqg+ZZLmZFdKHzxIIJ9\n-----END PRIVATE KEY-----\n",
+  "client_email": "ihc-chatbot@grand-cosmos-413120.iam.gserviceaccount.com",
+  "client_id": "116669429103683678330",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ihc-chatbot%40grand-cosmos-413120.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
